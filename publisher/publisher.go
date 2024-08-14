@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -32,13 +31,29 @@ func main() {
 
 	// Publish a message to the topic every 5 seconds
 	for {
-		text := fmt.Sprintf("Hello MQTT at %s", time.Now().Format(time.RFC3339))
+		// Read message from the user
+		fmt.Print("Enter message to publish (or type 'exit' to quit): ")
+		var text string
+		fmt.Scanln(&text)
+	
+		// Exit the loop if the user types "exit"
+		if text == "exit" {
+			break
+		}
+	
+		// Publish the user-provided message to the MQTT topic
 		token := client.Publish(topic, 0, false, text)
 		token.Wait()
 		fmt.Printf("Published message: %s\n", text)
-		time.Sleep(5 * time.Second)
+		
+		// Optional: Add a delay if needed
+		// time.Sleep(5 * time.Second)
 	}
-
+	
+	// Disconnect the client when done
+	client.Disconnect(250)
+	fmt.Println("Disconnected from MQTT broker")
+	
 	// Disconnect the client when done (this won't be reached in this loop)
-	// client.Disconnect(250)
+	//client.Disconnect(10)
 }
