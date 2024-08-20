@@ -54,6 +54,5 @@ func main() {
 	client.Disconnect(250)
 	fmt.Println("Disconnected from MQTT broker")
 	
-	// Disconnect the client when done (this won't be reached in this loop)
-	//client.Disconnect(10)
+	
 }
